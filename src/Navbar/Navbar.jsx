@@ -42,9 +42,11 @@ const Navbar = () => {
         </div>
         {/* button */}
         <div className="flex items-center justify-center gap-3">
-          <button className="btn btn-sm md:btn-md bg-rose-500 text-slate-50 shadow-rose-200">
-            Register <FaHeart />
-          </button>
+          <Link to={"/register"}>
+            <button className="btn btn-sm md:btn-md bg-rose-500 text-slate-50 shadow-rose-200">
+              Register <FaHeart />
+            </button>
+          </Link>
           {/* mobile menu */}
           <div className="md:hidden">
             <button
