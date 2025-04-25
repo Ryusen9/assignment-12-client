@@ -1,12 +1,12 @@
-import React from 'react'
-import Hero from '../Hero/Hero'
+import React from "react";
+import Hero from "../Hero/Hero";
 
 const HomeLayout = () => {
   return (
     <>
-    <Hero/>
+      <Hero />
     </>
-  )
-}
+  );
+};
 
-export default HomeLayout
+export default HomeLayout;
