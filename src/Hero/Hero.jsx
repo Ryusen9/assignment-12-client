@@ -4,7 +4,7 @@ import heroImg from "/public/Images/Hero/close-up-blood-test-omicron.jpg";
 const Hero = () => {
   return (
     <div
-      className="min-h-screen overflow-hidden flex items-center justify-center bg-center bg-cover bg-no-repeat"
+      className="min-h-screen overflow-hidden flex items-center justify-center bg-fixed bg-center bg-cover bg-no-repeat"
       style={{ backgroundImage: `url(${heroImg})` }}
     >
       <div className="min-h-screen w-full bg-black/50 flex flex-col items-center justify-center">

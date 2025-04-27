@@ -27,16 +27,16 @@ const Navbar = () => {
               <Link>Home</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
-              <Link>Donate</Link>
+              <Link>Dashboard</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
               <Link>Donate</Link>
             </li>
             <li className="font-semibold text-slate-950 hover:text-rose-500 cursor-pointer duration-200">
-              <Link>About Us</Link>
+              <Link to={"/about_us"}>About Us</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 text-slate-950 cursor-pointer duration-200">
-              <Link>Contact Us</Link>
+              <Link to={"/contact_us"}>Contact Us</Link>
             </li>
           </ul>
         </div>
@@ -94,7 +94,7 @@ const Navbar = () => {
                   <Link>Home</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
-                  <Link>Donate</Link>
+                  <Link>Dashboard</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
                   <Link>Donate</Link>

@@ -15,7 +15,7 @@ const RegisterFormHome = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto flex items-center justify-center p-5">
+    <div className="max-w-7xl my-5 mx-auto flex items-center justify-center p-5">
       <div className="flex flex-col gap-5 w-full">
         <p className="text-xl md:text-2xl lg:text-4xl font-bold">
           Register Yourself As a Volunteer
