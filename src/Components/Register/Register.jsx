@@ -1,10 +1,13 @@
 import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import animationData from "/public/Lottie/login animation.json";
 import { Helmet } from "react-helmet";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👈 Import eye icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Context from "../../Context/Context";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const {
@@ -17,13 +20,50 @@ const Register = () => {
 
   const password = watch("password");
 
+  const { createUser } = useContext(Context);
+
+  const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+  const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
   // States for show/hide password
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const handleImageUpload = async (imageFile) => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const res = await axios.post(image_hosting_api, formData);
+    return res.data.data.url;
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      const file = data.profilePicture[0];
+      const imageURL = await handleImageUpload(file);
+
+      const newUser = {
+        name: data.name,
+        email: data.email,
+        profilePicture: imageURL,
+      };
+
+      await createUser(data.email, data.password);
+
+      await axios.post("http://localhost:5000/users", newUser).then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            title: "Registration Successful",
+            text: `${data.name}, you have successfully registered!`,
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            reset();
+          });
+        }
+      });
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   return (
