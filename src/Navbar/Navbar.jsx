@@ -1,16 +1,48 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import logo from "/public/logo.png";
 import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { LuMenu } from "react-icons/lu";
 import { IoClose, IoMoon, IoSunny } from "react-icons/io5";
 import Context from "../Context/Context";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useContext(Context);
+  const [currentUser, setCurrentUser] = useState(null);
+  const { user, logoutUser } = useContext(Context);
+  console.log(user);
+  useEffect(() => {
+    axios.get(`http://localhost:5000/users/${user?.email}`).then((res) => {
+      if (res.data) {
+        setCurrentUser(res.data);
+      }
+    });
+  }, [user?.email]);
   const handleToggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
+  const handleLogOut = () => {
+    logoutUser()
+      .then(() => {
+        setCurrentUser(null);
+        Swal.fire(
+          "Logged Out",
+          "You have successfully logged out.",
+          "success"
+        );
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Logout Failed",
+          text: "An error occurred while logging out. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+        })
+      });
   };
   return (
     <nav className="fixed top-0 left-0 w-full flex items-center justify-center z-10">
@@ -42,11 +74,51 @@ const Navbar = () => {
         </div>
         {/* button */}
         <div className="flex items-center justify-center gap-3">
-          <Link to={"/register"}>
-            <button className="btn btn-sm md:btn-md bg-rose-500 text-slate-50 shadow-rose-200">
-              Register <FaHeart />
-            </button>
-          </Link>
+          {user ? (
+            <>
+              <button
+                onClick={() =>
+                  document.getElementById("my_modal_2").showModal()
+                }
+              >
+                <div className="avatar">
+                  <div className="w-8 rounded-full">
+                    <img src={currentUser?.profilePicture} />
+                  </div>
+                </div>
+              </button>
+              <dialog id="my_modal_2" className="modal">
+                <div className="modal-box">
+                  <h3 className="font-bold text-lg">
+                    Hello! {currentUser?.name}
+                  </h3>
+                  <p className="py-4">
+                    Select your profile to edit or update your information.
+                  </p>
+                  <div className="flex items-center justify-end gap-3">
+                    <button className="btn btn-primary bg-rose-500 font-semibold border-none">
+                      Update
+                    </button>
+                    <button
+                      onClick={handleLogOut}
+                      className="btn btn-outline btn-error"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                  <button>close</button>
+                </form>
+              </dialog>
+            </>
+          ) : (
+            <Link to={"/register"}>
+              <button className="btn btn-sm md:btn-md bg-rose-500 text-slate-50 shadow-rose-200">
+                Register <FaHeart />
+              </button>
+            </Link>
+          )}
           {/* mobile menu */}
           <div className="md:hidden">
             <button

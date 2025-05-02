@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom"; // 👈 for navigation
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
   FaGoogle,
@@ -9,8 +9,10 @@ import {
   FaFacebookF,
   FaEye,
   FaEyeSlash,
-} from "react-icons/fa"; // 👈 icons
+} from "react-icons/fa";
 import animationData from "/public/Lottie/login animation.json";
+import Context from "../../Context/Context";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const {
@@ -20,10 +22,22 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const navigate = useNavigate();
+  const { logInUser } = useContext(Context);
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    console.log(data);
+    const email = data.email;
+    const password = data.password;
+    logInUser(email, password).then((res) => {
+      if (res.user) {
+        Swal.fire(
+          "Login Successful",
+          "You have successfully logged in!",
+          "success"
+        ).then(() => navigate("/"));
+      }
+    });
     reset();
   };
 
@@ -123,7 +137,10 @@ const Login = () => {
             {/* Link to Register */}
             <p className="text-center">
               Don't have an account?{" "}
-              <Link to="/register" className="font-semibold text-rose-600 hover:underline">
+              <Link
+                to="/register"
+                className="font-semibold text-rose-600 hover:underline"
+              >
                 Register
               </Link>
             </p>
