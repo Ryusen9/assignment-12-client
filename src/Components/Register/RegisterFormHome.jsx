@@ -380,7 +380,7 @@ const RegisterFormHome = () => {
                   Select District
                 </option>
                 {districts.map((district) => (
-                  <option className="text-black" value={district.name}>
+                  <option key={district.id} className="text-black" value={district.name}>
                     {district.name}
                   </option>
                 ))}
@@ -402,7 +402,7 @@ const RegisterFormHome = () => {
                   Select Upazila
                 </option>
                 {upazilas.map((upazila) => (
-                  <option className="text-black" value={upazila.name}>
+                  <option key={upazila.id} className="text-black" value={upazila.name}>
                     {upazila.name}
                   </option>
                 ))}

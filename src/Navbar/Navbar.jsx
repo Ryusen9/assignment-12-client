@@ -29,11 +29,7 @@ const Navbar = () => {
     logoutUser()
       .then(() => {
         setCurrentUser(null);
-        Swal.fire(
-          "Logged Out",
-          "You have successfully logged out.",
-          "success"
-        );
+        Swal.fire("Logged Out", "You have successfully logged out.", "success");
       })
       .catch((error) => {
         Swal.fire({
@@ -41,7 +37,7 @@ const Navbar = () => {
           text: "An error occurred while logging out. Please try again.",
           icon: "error",
           confirmButtonText: "OK",
-        })
+        });
       });
   };
   return (
@@ -56,10 +52,10 @@ const Navbar = () => {
         <div className="hidden md:block">
           <ul className="flex items-center justify-center gap-5">
             <li className="font-semibold hover:text-rose-500 text-slate-950 cursor-pointer duration-200">
-              <Link>Home</Link>
+              <Link to={"/"}>Home</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
-              <Link>Dashboard</Link>
+              <Link to={`/dashboard/${user?.role || "user"}`}>Dashboard</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
               <Link>Donate</Link>
@@ -166,7 +162,9 @@ const Navbar = () => {
                   <Link>Home</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
-                  <Link>Dashboard</Link>
+                  <Link to={`/dashboard/${user?.role || "user"}`}>
+                    Dashboard
+                  </Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
                   <Link>Donate</Link>

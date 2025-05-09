@@ -5,6 +5,8 @@ import Login from "../Components/Login/Login";
 import Register from "../Components/Register/Register";
 import AboutUs from "../Extras/AboutUs";
 import ContactUs from "../Extras/ContactUs";
+import PrivateRoute from "./PrivateRoute";
+import RoleBasedDashboard from "../Dashboard/RoleBasedDashboard";
 
 const routers = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const routers = createBrowserRouter([
         element: <ContactUs />,
       },
     ],
+  },
+  {
+    path: "/dashboard/:id",
+    element: (
+      <PrivateRoute allowedRoles={["admin", "volunteer", "user"]}>
+        <RoleBasedDashboard />
+      </PrivateRoute>
+    ),
   },
 ]);
 

@@ -45,6 +45,7 @@ const Register = () => {
         name: data.name,
         email: data.email,
         profilePicture: imageURL,
+        role: "user",
       };
 
       await createUser(data.email, data.password);
