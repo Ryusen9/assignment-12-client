@@ -1,6 +1,7 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import Swal from "sweetalert2";
 const RegisterFormHome = () => {
   const {
     register,
@@ -8,14 +9,66 @@ const RegisterFormHome = () => {
     reset,
     formState: { errors },
   } = useForm();
+  const [districts, setDistricts] = useState([]);
+  const [upazilas, setUpazilas] = useState([]);
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+  const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+  useEffect(() => {
+    axios.get("/public/districts.json").then((res) => setDistricts(res.data));
+    axios.get("/public/upazilas.json").then((res) => {
+      const sortedUpazilas = res.data.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setUpazilas(sortedUpazilas);
+    });
+  }, []);
+  const handleImageUpload = async (imageFile) => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    const res = await axios.post(image_hosting_api, formData);
+    return res.data.data.url;
+  };
+
+  const onSubmit = async (data) => {
+    const file = data.photo[0];
+    const imageURL = await handleImageUpload(file);
+    const newVolunteer = {
+      name: data.name,
+      email: data.email,
+      photo: imageURL,
+      age: data.age,
+      bloodGroup: data.bloodGroup,
+      profession: data.profession,
+      contact: data.contact,
+      address: data.address,
+      gender: data.gender,
+      district: data.district,
+      upazila: data.upazila,
+    };
+
+    // Send the new volunteer data to the server
+    await axios
+      .post("http://localhost:5000/volunteers", newVolunteer)
+      .then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            title: "Registration Successful",
+            text: `${data.name}, you have successfully registered!`,
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            reset();
+          });
+        }
+      });
   };
 
   return (
-    <div className="max-w-7xl my-5 mx-auto flex items-center justify-center p-5">
+    <div
+      id="volunteer-form"
+      className="max-w-7xl my-5 mx-auto flex items-center justify-center p-5"
+    >
       <div className="flex flex-col gap-5 w-full">
         <p className="text-xl md:text-2xl lg:text-4xl font-bold">
           Register Yourself As a Volunteer
@@ -150,7 +203,7 @@ const RegisterFormHome = () => {
               />
             </label>
             {errors.age && (
-                <p className="mt-1 text-red-500">Please enter your age</p>
+              <p className="mt-1 text-red-500">Please enter your age</p>
             )}
           </div>
 
@@ -276,9 +329,7 @@ const RegisterFormHome = () => {
               />
             </label>
             {errors.contact && (
-              <p className="mt-1 text-red-500">
-                Enter a valid contact number
-              </p>
+              <p className="mt-1 text-red-500">Enter a valid contact number</p>
             )}
           </div>
 
@@ -317,7 +368,50 @@ const RegisterFormHome = () => {
               <p className="mt-1 text-red-500">Please enter your address</p>
             )}
           </div>
-
+          {/* District Field */}
+          <div className="w-full">
+            <label className="input validator flex items-center gap-2">
+              <select
+                className="w-full bg-transparent focus:outline-none"
+                defaultValue=""
+                {...register("district", { required: true })}
+              >
+                <option value="" disabled>
+                  Select District
+                </option>
+                {districts.map((district) => (
+                  <option className="text-black" value={district.name}>
+                    {district.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {errors.district && (
+              <p className="mt-1 text-red-500">Please select District</p>
+            )}
+          </div>
+          {/* Upazila Field */}
+          <div className="w-full">
+            <label className="input validator flex items-center gap-2">
+              <select
+                className="w-full bg-transparent focus:outline-none"
+                defaultValue=""
+                {...register("upazila", { required: true })}
+              >
+                <option value="" disabled>
+                  Select Upazila
+                </option>
+                {upazilas.map((upazila) => (
+                  <option className="text-black" value={upazila.name}>
+                    {upazila.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {errors.district && (
+              <p className="mt-1 text-red-500">Please select District</p>
+            )}
+          </div>
           {/* Gender Field */}
           <div className="w-full">
             <label className="input validator flex items-center gap-2">
