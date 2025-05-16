@@ -55,7 +55,7 @@ const Navbar = () => {
               <Link to={"/"}>Home</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
-              <Link to={`/dashboard/${user?.role || "user"}`}>Dashboard</Link>
+              <Link to={"/dashboard"}>Dashboard</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
               <Link>Donate</Link>
@@ -162,9 +162,7 @@ const Navbar = () => {
                   <Link>Home</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
-                  <Link to={`/dashboard/${user?.role || "user"}`}>
-                    Dashboard
-                  </Link>
+                  <Link to={"/dashboard"}>Dashboard</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
                   <Link>Donate</Link>

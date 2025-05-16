@@ -7,6 +7,7 @@ import AboutUs from "../Extras/AboutUs";
 import ContactUs from "../Extras/ContactUs";
 import PrivateRoute from "./PrivateRoute";
 import RoleBasedDashboard from "../Dashboard/RoleBasedDashboard";
+import UserDashboardHome from "../Dashboard/Dashboard Components/UserDashboardHome";
 
 const routers = createBrowserRouter([
   {
@@ -36,12 +37,18 @@ const routers = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard/:id",
+    path: "/dashboard",
     element: (
       <PrivateRoute allowedRoles={["admin", "volunteer", "user"]}>
         <RoleBasedDashboard />
       </PrivateRoute>
     ),
+    children: [
+      {
+        path: "/dashboard",
+        element: <UserDashboardHome />,
+      },
+    ],
   },
 ]);
 

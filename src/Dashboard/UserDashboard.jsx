@@ -1,12 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import Context from "../Context/Context";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { GoHome } from "react-icons/go";
+import { HiOutlineMenuAlt1 } from "react-icons/hi";
 
 const UserDashboard = () => {
   const { user } = useContext(Context);
   const [currentUser, setCurrentUser] = useState({});
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     if (user?.email) {
@@ -17,8 +22,11 @@ const UserDashboard = () => {
   }, [user?.email]);
 
   return (
-    <div className="min-h-screen">
-      <aside className="fixed top-0 left-0 w-64 h-full bg-base-300 flex flex-col">
+    <div className="min-h-screen flex">
+      <div className="block lg:hidden">
+        <HiOutlineMenuAlt1 className="btn btn-sm text-sm btn-primary bg-rose-500 border-2 border-rose-600 hover:text-white hover:bg-rose-600 text-white" />
+      </div>
+      <aside className="w-64 bg-base-300 flex flex-col">
         <div className="flex justify-center items-center gap-4 mb-10 p-4">
           <div className="avatar">
             <div className="w-10 lg:w-16 rounded-full">
@@ -33,12 +41,22 @@ const UserDashboard = () => {
         </div>
         <nav>
           <ul className="flex flex-col">
-            <li className="font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4">
-              <Link to={"/"} className="flex items-center gap-3"> <GoHome/>Home</Link>
+            <li>
+              <NavLink
+                to={"/"}
+                className="flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
+              >
+                {" "}
+                <GoHome />
+                Home
+              </NavLink>
             </li>
           </ul>
         </nav>
       </aside>
+      <div className="w-full min-h-screen">
+        <Outlet />
+      </div>
     </div>
   );
 };
