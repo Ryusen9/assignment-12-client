@@ -1,14 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../Context/Context";
 import axios from "axios";
 import { NavLink, Outlet } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { HiOutlineMenuAlt1 } from "react-icons/hi";
+import { IoIosClose } from "react-icons/io";
+import gsap from "gsap";
+import { FaHandHoldingHeart } from "react-icons/fa";
+import { CiBoxList } from "react-icons/ci";
 
 const UserDashboard = () => {
   const { user } = useContext(Context);
   const [currentUser, setCurrentUser] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const sidebarRef = useRef(null);
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
@@ -20,14 +25,42 @@ const UserDashboard = () => {
       });
     }
   }, [user?.email]);
+  useEffect(() => {
+    if (isMenuOpen) {
+      gsap.from(sidebarRef.current, {
+        duration: 0.5,
+        x: -100,
+        opacity: 0,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.to(sidebarRef.current, {
+            duration: 0.5,
+            x: 0,
+            opacity: 1,
+          });
+        },
+      });
+    }
+  }, [isMenuOpen]);
 
   return (
-    <div className="min-h-screen flex">
-      <div className="block lg:hidden">
-        <HiOutlineMenuAlt1 className="btn btn-sm text-sm btn-primary bg-rose-500 border-2 border-rose-600 hover:text-white hover:bg-rose-600 text-white" />
+    <div className="min-h-screen flex overflow-hidden">
+      <div
+        onClick={toggleMenu}
+        className={`lg:hidden ${isMenuOpen ? "hidden" : "block"} p-4`}
+      >
+        <HiOutlineMenuAlt1 className="text-3xl" />
       </div>
-      <aside className="w-64 bg-base-300 flex flex-col">
-        <div className="flex justify-center items-center gap-4 mb-10 p-4">
+      <aside
+        ref={sidebarRef}
+        className={`${
+          isMenuOpen ? "w-64" : "w-0"
+        } lg:w-72 overflow-hidden bg-base-300 flex flex-col absolute top-0 left-0 lg:relative z-30 h-[100vh]`}
+      >
+        <div className="flex flex-col lg:flex-row lg:justify-center lg:items-center gap-4 mb-10 p-4">
+          <div className="lg:hidden flex justify-end w-full">
+            <IoIosClose onClick={toggleMenu} className="text-3xl" />
+          </div>
           <div className="avatar">
             <div className="w-10 lg:w-16 rounded-full">
               <img src={currentUser?.profilePicture} />
@@ -36,19 +69,41 @@ const UserDashboard = () => {
           <div className="flex flex-col justify-center">
             <p className="text-lg">Welcome</p>
             <h2 className="text-lg font-bold">{currentUser?.name}</h2>
-            <p className="text-sm text-gray-500">{currentUser?.email}</p>
+            <p className="text-xs md:text-sm text-gray-500">
+              {currentUser?.email}
+            </p>
           </div>
         </div>
         <nav>
           <ul className="flex flex-col">
             <li>
               <NavLink
-                to={"/"}
-                className="flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
+                to={"/dashboard"}
+                className="text-xs md:text-sm lg:text-base flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
               >
                 {" "}
                 <GoHome />
                 Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={"/dashboard/my-donation-requests"}
+                className="text-xs md:text-sm lg:text-base flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
+              >
+                {" "}
+                <CiBoxList />
+                My Donation Requests
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={"/dashboard/create-donation-request"}
+                className="text-xs md:text-sm lg:text-base flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
+              >
+                {" "}
+                <FaHandHoldingHeart />
+                Create Donation Request
               </NavLink>
             </li>
           </ul>

@@ -8,6 +8,8 @@ import ContactUs from "../Extras/ContactUs";
 import PrivateRoute from "./PrivateRoute";
 import RoleBasedDashboard from "../Dashboard/RoleBasedDashboard";
 import UserDashboardHome from "../Dashboard/Dashboard Components/UserDashboardHome";
+import MyDonationReqAll from "../Dashboard/Dashboard Components/MyDonationReqAll";
+import CreateDonationReq from "../Dashboard/Dashboard Components/CreateDonationReq";
 
 const routers = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ const routers = createBrowserRouter([
         path: "/dashboard",
         element: <UserDashboardHome />,
       },
+      {
+        path: "/dashboard/my-donation-requests",
+        element: <MyDonationReqAll />,
+      },
+      {
+        path: "/dashboard/create-donation-request",
+        element: <CreateDonationReq/>,
+      }
     ],
   },
 ]);

@@ -15,8 +15,8 @@ const RegisterFormHome = () => {
   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
   useEffect(() => {
-    axios.get("/public/districts.json").then((res) => setDistricts(res.data));
-    axios.get("/public/upazilas.json").then((res) => {
+    axios.get("/districts.json").then((res) => setDistricts(res.data));
+    axios.get("/upazilas.json").then((res) => {
       const sortedUpazilas = res.data.sort((a, b) =>
         a.name.localeCompare(b.name)
       );
@@ -45,6 +45,7 @@ const RegisterFormHome = () => {
       gender: data.gender,
       district: data.district,
       upazila: data.upazila,
+      role: "volunteer",
     };
 
     // Send the new volunteer data to the server
@@ -380,7 +381,11 @@ const RegisterFormHome = () => {
                   Select District
                 </option>
                 {districts.map((district) => (
-                  <option key={district.id} className="text-black" value={district.name}>
+                  <option
+                    key={district.id}
+                    className="text-black"
+                    value={district.name}
+                  >
                     {district.name}
                   </option>
                 ))}
@@ -402,14 +407,18 @@ const RegisterFormHome = () => {
                   Select Upazila
                 </option>
                 {upazilas.map((upazila) => (
-                  <option key={upazila.id} className="text-black" value={upazila.name}>
+                  <option
+                    key={upazila.id}
+                    className="text-black"
+                    value={upazila.name}
+                  >
                     {upazila.name}
                   </option>
                 ))}
               </select>
             </label>
-            {errors.district && (
-              <p className="mt-1 text-red-500">Please select District</p>
+            {errors.upazila && (
+              <p className="mt-1 text-red-500">Please select Upazilla</p>
             )}
           </div>
           {/* Gender Field */}
