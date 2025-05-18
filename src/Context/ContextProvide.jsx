@@ -15,6 +15,7 @@ const ContextProvide = ({ children }) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   }
+  // yarn jsrepo add https://reactbits.dev/tailwind/Components/SpotlightCard
 
   const logInUser = (email, password) => {
     setLoading(true);
