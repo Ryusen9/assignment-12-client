@@ -13,7 +13,6 @@ const Navbar = () => {
   const { theme, setTheme } = useContext(Context);
   const [currentUser, setCurrentUser] = useState(null);
   const { user, logoutUser } = useContext(Context);
-  console.log(user);
   useEffect(() => {
     axios.get(`http://localhost:5000/users/${user?.email}`).then((res) => {
       if (res.data) {

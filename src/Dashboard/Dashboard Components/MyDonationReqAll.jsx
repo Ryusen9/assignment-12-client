@@ -6,24 +6,57 @@ import { FaRegHospital, FaRegUser, FaUserInjured } from "react-icons/fa";
 import { MdLocalPhone, MdOutlineBloodtype } from "react-icons/md";
 import { FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 import { BsCalendar2Date } from "react-icons/bs";
-import { GrStatusGood } from "react-icons/gr";
+import { GrFormNext, GrFormPrevious, GrStatusGood } from "react-icons/gr";
 import gsap from "gsap";
 import Swal from "sweetalert2";
+import { useLoaderData } from "react-router-dom";
 
 const MyDonationReqAll = () => {
   const { user } = useContext(Context);
   const [donationReqs, setDonationReqs] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedReq, setSelectedReq] = useState(null);
+  const [donationPerPage, setDonationPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const modalRef = useRef(null);
+
+  // Calculate the number of pages;
+  const numberOfPages = Math.ceil(totalCount / donationPerPage);
+
+  const pages = [];
+  for (let i = 1; i <= numberOfPages; i++) {
+    pages.push(i);
+  }
+
+  const handlePrvPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+  const handleNxtPage = () => {
+    if (currentPage < numberOfPages) setCurrentPage(currentPage + 1);
+  };
+  const handleItemNumberChange = (e) => {
+    const value = parseInt(e.target.value);
+    setDonationPerPage(value);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/donation-requests?email=${user.email}`)
-        .then((res) => setDonationReqs(res.data));
+        .get(
+          `http://localhost:5000/donation-requests?email=${user.email}&page=${currentPage}&size=${donationPerPage}`
+        )
+        .then((res) => {
+          // Destructure total and requests from response
+          setDonationReqs(res.data.data);
+          setTotalCount(res.data.count);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
-  }, [user]);
+  }, [user, currentPage, donationPerPage]);
 
   useEffect(() => {
     if (isEditing && modalRef.current) {
@@ -84,15 +117,19 @@ const MyDonationReqAll = () => {
           .delete(`http://localhost:5000/donation-requests/${reqId}`)
           .then((res) => {
             if (res.status === 200) {
-              Swal.fire("Deleted!", "Your request has been deleted.", "success");
+              Swal.fire(
+                "Deleted!",
+                "Your request has been deleted.",
+                "success"
+              );
               setDonationReqs(donationReqs.filter((req) => req._id !== reqId));
             }
           });
       }
     });
-  }
+  };
   return (
-    <div className="p-6 min-h-full w-full text-slate-100">
+    <div className="p-6 min-h-full w-full text-slate-100 flex flex-col items-center gap-7">
       <div>
         <p className="text-center text-lg md:text-2xl lg:text-4xl font-bold">
           Donation Requests!
@@ -157,13 +194,58 @@ const MyDonationReqAll = () => {
                 >
                   Edit
                 </button>
-                <button onClick={() => handleDelete(req._id)} className="btn btn-sm btn-error btn-outline">
+                <button
+                  onClick={() => handleDelete(req._id)}
+                  className="btn btn-sm btn-error btn-outline"
+                >
                   Delete Request
                 </button>
               </div>
             </div>
           </SpotlightCard>
         ))}
+      </div>
+      <div className="flex flex-col justify-center items-center">
+        <p>Current Page: {currentPage}</p>
+        <div className="flex items-center justify-center gap-2.5 my-6">
+          <button
+            onClick={handlePrvPage}
+            className="btn btn-primary btn-outline text-xl"
+            disabled={currentPage === 1}
+          >
+            <GrFormPrevious />
+          </button>
+          <div className="join">
+            {pages.map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`join-item btn ${
+                  currentPage === page ? "btn-active" : ""
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={handleNxtPage}
+            className="btn btn-primary btn-outline text-xl"
+            disabled={currentPage === numberOfPages}
+          >
+            <GrFormNext />
+          </button>
+          <select
+            defaultValue={10}
+            className="select ml-3"
+            onChange={handleItemNumberChange}
+            value={donationPerPage}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
       </div>
 
       {/* Floating Edit Modal */}
