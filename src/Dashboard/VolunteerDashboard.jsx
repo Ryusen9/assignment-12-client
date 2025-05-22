@@ -7,6 +7,7 @@ import { HiOutlineMenuAlt1 } from "react-icons/hi";
 import { IoIosClose } from "react-icons/io";
 import gsap from "gsap";
 import { FiHome } from "react-icons/fi";
+import { BiDonateBlood } from "react-icons/bi";
 
 const UserDashboard = () => {
   const { user } = useContext(Context);
@@ -19,9 +20,11 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (user?.email) {
-      axios.get(`http://localhost:5000/users/${user.email}`).then((res) => {
-        if (res.data) setCurrentUser(res.data);
-      });
+      axios
+        .get(`http://localhost:5000/volunteers/${user.email}`)
+        .then((res) => {
+          if (res.data) setCurrentUser(res.data);
+        });
     }
   }, [user?.email]);
   useEffect(() => {
@@ -62,7 +65,7 @@ const UserDashboard = () => {
           </div>
           <div className="avatar">
             <div className="w-10 lg:w-16 rounded-full">
-              <img src={currentUser?.profilePicture} />
+              <img src={currentUser?.photo} />
             </div>
           </div>
           <div className="flex flex-col justify-center">
@@ -83,6 +86,16 @@ const UserDashboard = () => {
                 {" "}
                 <GoHome />
                 Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={"/dashboard/volunteer-dashboard/allDonations"}
+                className="text-xs md:text-sm lg:text-base flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
+              >
+                {" "}
+                <BiDonateBlood />
+                All Donations
               </NavLink>
             </li>
           </ul>

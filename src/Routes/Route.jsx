@@ -13,6 +13,7 @@ import CreateDonationReq from "../Dashboard/Dashboard Components/CreateDonationR
 import Donations from "../Donation/Donations";
 import VolunteerHome from "../Dashboard/Volunteer Dashboard/VolunteerHome";
 import ApplyDonation from "../Donation/ApplyDonation";
+import AllDonation from "../Dashboard/Volunteer Dashboard/AllDonation";
 
 const routers = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ const routers = createBrowserRouter([
         path: "/dashboard/volunteer-dashboard/home",
         element: <VolunteerHome />,
       },
+      {
+        path: "/dashboard/volunteer-dashboard/allDonations",
+        element: <AllDonation/>,
+      }
     ],
   },
 ]);

@@ -71,7 +71,8 @@ const DonationInformation = () => {
           });
         }
         setCurrentUser((prev) => ({ ...prev, ...updatedData }));
-      }).then(() => {
+      })
+      .then(() => {
         window.location.reload();
       });
   };
