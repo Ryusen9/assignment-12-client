@@ -46,6 +46,7 @@ const CreateDonationReq = () => {
       donation_time,
       request_message,
       status: "pending",
+      createdAt: new Date().toLocaleDateString("en-CA"),
     };
 
     try {

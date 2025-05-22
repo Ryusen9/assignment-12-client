@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Context from "../../Context/Context";
+import axios from "axios";
 
 const DonationReqHome = () => {
+  const { user } = useContext(Context);
+  const [donationRequests, setDonationRequests] = useState([]);
+  useEffect(() => {
+    if (!user) {
+      window.location.href = "/login";
+    }
+    if (user?.email) {
+      axios
+        .get(
+          `http://localhost:5000/donation-requests?email=${
+            user.email
+          }&sortOrder=${"newest"}&limit=${3}`
+        )
+        .then((res) => {
+          if (res.data) setDonationRequests(res.data.data);
+        });
+    }
+  }, []);
+  console.log(donationRequests);
   return (
     <div className="min-h-full">
       <p className="text-center text-xl md:text-2xl lg:text-4xl font-bold mb-6">
@@ -13,33 +34,24 @@ const DonationReqHome = () => {
             <thead>
               <tr>
                 <th></th>
-                <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
+                <th>Requested By</th>
+                <th>Hospital</th>
+                <th>Blood Group</th>
+                <th>Donation Date</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
-              <tr>
-                <th>1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-              </tr>
-              {/* row 2 */}
-              <tr>
-                <th>2</th>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-              </tr>
-              {/* row 3 */}
-              <tr>
-                <th>3</th>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-              </tr>
+              {donationRequests?.map((request, index) => (
+                <tr key={index}>
+                  <th>{index + 1}</th>
+                  <td>{request?.name}</td>
+                  <td>{request?.hospital_name}</td>
+                  <td>{request?.bloodGroup}</td>
+                  <td>{request?.donation_date}</td>
+                  <td>{request?.status}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
