@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import animationData from "/public/Lottie/login animation.json";
 import { Helmet } from "react-helmet";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Context from "../../Context/Context";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -17,7 +17,7 @@ const Register = () => {
     reset,
     formState: { errors },
   } = useForm();
-
+  const navigate = useNavigate();
   const password = watch("password");
 
   const { createUser } = useContext(Context);
@@ -59,6 +59,7 @@ const Register = () => {
             confirmButtonText: "OK",
           }).then(() => {
             reset();
+            navigate("/");
           });
         }
       });

@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../Context/Context";
 import axios from "axios";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { GoHome } from "react-icons/go";
 import { HiOutlineMenuAlt1 } from "react-icons/hi";
 import { IoIosClose } from "react-icons/io";
 import gsap from "gsap";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import { CiBoxList } from "react-icons/ci";
+import { FiHome } from "react-icons/fi";
 
 const UserDashboard = () => {
   const { user } = useContext(Context);
@@ -111,6 +112,13 @@ const UserDashboard = () => {
       </aside>
       <div className="w-full min-h-screen">
         <Outlet />
+      </div>
+      <div className="fixed bottom-10 right-10">
+        <Link to={"/"}>
+          <button className="btn btn-sm btn-primary">
+            <FiHome className="text-lg" />
+          </button>
+        </Link>
       </div>
     </div>
   );

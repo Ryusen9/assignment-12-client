@@ -39,6 +39,7 @@ const Navbar = () => {
         });
       });
   };
+  console.log(user);
   return (
     <nav className="fixed top-0 left-0 w-full flex items-center justify-center z-10">
       <div className="flex items-center justify-between max-w-7xl p-3 mx-auto bg-slate-50 w-full lg:rounded-lg">
@@ -57,7 +58,7 @@ const Navbar = () => {
               <Link to={"/dashboard"}>Dashboard</Link>
             </li>
             <li className="font-semibold hover:text-rose-500 cursor-pointer text-slate-950 duration-200">
-              <Link>Donate</Link>
+              <Link to={"/donations"}>Donate</Link>
             </li>
             <li className="font-semibold text-slate-950 hover:text-rose-500 cursor-pointer duration-200">
               <Link to={"/about_us"}>About Us</Link>
@@ -91,9 +92,6 @@ const Navbar = () => {
                     Select your profile to edit or update your information.
                   </p>
                   <div className="flex items-center justify-end gap-3">
-                    <button className="btn btn-primary bg-rose-500 font-semibold border-none">
-                      Update
-                    </button>
                     <button
                       onClick={handleLogOut}
                       className="btn btn-outline btn-error"
@@ -164,13 +162,13 @@ const Navbar = () => {
                   <Link to={"/dashboard"}>Dashboard</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
-                  <Link>Donate</Link>
+                  <Link to={"/donations"}>Donate</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
-                  <Link>About Us</Link>
+                  <Link to={"/about_us"}>About Us</Link>
                 </li>
                 <li className="border-t-2 hover:border-t-rose-500 hover:text-rose-500 font-semibold hover:border-b-rose-500 border-b-2 w-full p-4 cursor-pointer duration-200">
-                  <Link>Contact Us</Link>
+                  <Link to={"/contact_us"}>Contact Us</Link>
                 </li>
               </ul>
             </div>

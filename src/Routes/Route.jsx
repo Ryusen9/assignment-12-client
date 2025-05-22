@@ -10,6 +10,8 @@ import RoleBasedDashboard from "../Dashboard/RoleBasedDashboard";
 import UserDashboardHome from "../Dashboard/Dashboard Components/UserDashboardHome";
 import MyDonationReqAll from "../Dashboard/Dashboard Components/MyDonationReqAll";
 import CreateDonationReq from "../Dashboard/Dashboard Components/CreateDonationReq";
+import Donations from "../Donation/Donations";
+import VolunteerHome from "../Dashboard/Volunteer Dashboard/VolunteerHome";
 
 const routers = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ const routers = createBrowserRouter([
         path: "/contact_us",
         element: <ContactUs />,
       },
+      {
+        path: "/donations",
+        element: (
+          <PrivateRoute allowedRoles={["admin", "volunteer", "user"]}>
+            <Donations />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -56,8 +66,12 @@ const routers = createBrowserRouter([
       },
       {
         path: "/dashboard/create-donation-request",
-        element: <CreateDonationReq/>,
-      }
+        element: <CreateDonationReq />,
+      },
+      {
+        path: "/dashboard/volunteer-dashboard/home",
+        element: <VolunteerHome />,
+      },
     ],
   },
 ]);
