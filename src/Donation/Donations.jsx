@@ -123,7 +123,7 @@ const MyDonationReqAll = () => {
               </div>
             </div>
             <div className="mt-3 flex items-center justify-end">
-              <Link state={{ req }} to={"/dashboard/volunteer-dashboard/home"}>
+              <Link state={{ req }} to={"/donateNow"}>
                 <button className="btn btn-sm md:btn-md btn-primary">
                   Donate Now
                 </button>

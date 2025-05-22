@@ -12,6 +12,7 @@ import MyDonationReqAll from "../Dashboard/Dashboard Components/MyDonationReqAll
 import CreateDonationReq from "../Dashboard/Dashboard Components/CreateDonationReq";
 import Donations from "../Donation/Donations";
 import VolunteerHome from "../Dashboard/Volunteer Dashboard/VolunteerHome";
+import ApplyDonation from "../Donation/ApplyDonation";
 
 const routers = createBrowserRouter([
   {
@@ -46,6 +47,14 @@ const routers = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "/donateNow",
+        element: (
+          <PrivateRoute allowedRoles={["admin", "volunteer", "user"]}>
+            <ApplyDonation/>
+          </PrivateRoute>
+        ),
+      }
     ],
   },
   {
