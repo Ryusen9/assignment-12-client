@@ -45,6 +45,7 @@ const Register = () => {
         name: data.name,
         email: data.email,
         profilePicture: imageURL,
+        createdAt: new Date(),
         role: "user",
       };
 

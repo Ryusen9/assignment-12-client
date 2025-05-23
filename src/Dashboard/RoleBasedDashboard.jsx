@@ -16,7 +16,7 @@ const RoleBasedDashboard = () => {
     }
 
     if (user?.email) {
-      axios.get(`http://localhost:5000/users/${user.email}`).then((res) => {
+      axios.get(`http://localhost:5000/users-by-email/${user.email}`).then((res) => {
         if (res.data) {
           setCurrentUser(res.data);
         }
@@ -32,9 +32,16 @@ const RoleBasedDashboard = () => {
     );
   }
 
-  if (currentUser.role === "admin") return <AdminDashboard />;
-  if (currentUser.role === "volunteer") return <VolunteerDashboard />;
-  return <UserDashboard />;
+  // if (currentUser.role === "admin") return <AdminDashboard />;
+  // if (currentUser.role === "volunteer") return <VolunteerDashboard />;
+  // return <UserDashboard />;
+  if (currentUser.role === "user") {
+    return <UserDashboard />;
+  } else if (currentUser.role === "volunteer") {
+    return <VolunteerDashboard />;
+  } else {
+    return <AdminDashboard />;
+  }
 };
 
 export default RoleBasedDashboard;

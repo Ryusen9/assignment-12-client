@@ -21,7 +21,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (user?.email) {
-      axios.get(`http://localhost:5000/users/${user.email}`).then((res) => {
+      axios.get(`http://localhost:5000/users-by-email/${user.email}`).then((res) => {
         if (res.data) setCurrentUser(res.data);
       });
     }

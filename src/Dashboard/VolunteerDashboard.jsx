@@ -9,7 +9,7 @@ import gsap from "gsap";
 import { FiHome } from "react-icons/fi";
 import { BiDonateBlood } from "react-icons/bi";
 
-const UserDashboard = () => {
+const VolunteerDashboard = () => {
   const { user } = useContext(Context);
   const [currentUser, setCurrentUser] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -115,4 +115,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default VolunteerDashboard;

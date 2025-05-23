@@ -6,7 +6,7 @@ import SpotlightCard from "../../Shared/SpotlightCard";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-const DonationInformation = () => {
+const AdminDashboardHome = () => {
   const { user } = useContext(Context);
   const [currentUser, setCurrentUser] = useState(null);
   const {
@@ -81,7 +81,7 @@ const DonationInformation = () => {
   return (
     <div className="max-w-5xl mx-auto p-4">
       <p className="text-center text-2xl md:text-3xl font-bold mb-6">
-        Information Regarding Donation Request
+        Information Regarding Admin
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -160,17 +160,8 @@ const DonationInformation = () => {
           </div>
         </SpotlightCard>
       </form>
-
-      <div className="text-center mt-6">
-        <Link
-          to="/dashboard/my-donation-requests"
-          className="btn btn-outline btn-primary border-rose-500 text-rose-500 hover:bg-rose-600 hover:text-white duration-150"
-        >
-          View My All Requests
-        </Link>
-      </div>
-    </div>
-  );
+    </div>  
+)
 };
 
-export default DonationInformation;
+export default AdminDashboardHome;

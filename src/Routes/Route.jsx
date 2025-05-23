@@ -14,6 +14,8 @@ import Donations from "../Donation/Donations";
 import VolunteerHome from "../Dashboard/Volunteer Dashboard/VolunteerHome";
 import ApplyDonation from "../Donation/ApplyDonation";
 import AllDonation from "../Dashboard/Volunteer Dashboard/AllDonation";
+import AdminDashboardHome from "../Dashboard/Admin/AdminDashboardHome";
+import UserList from "../Dashboard/Admin/UserList";
 
 const routers = createBrowserRouter([
   {
@@ -85,7 +87,15 @@ const routers = createBrowserRouter([
       {
         path: "/dashboard/volunteer-dashboard/allDonations",
         element: <AllDonation/>,
-      }
+      },
+      {
+        path: "/dashboard/admin/home",
+        element: <AdminDashboardHome/>
+      },
+      {
+        path: "/dashboard/admin/users",
+        element: <UserList/>
+      },
     ],
   },
 ]);

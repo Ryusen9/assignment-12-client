@@ -14,11 +14,13 @@ const Navbar = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const { user, logoutUser } = useContext(Context);
   useEffect(() => {
-    axios.get(`http://localhost:5000/users/${user?.email}`).then((res) => {
-      if (res.data) {
-        setCurrentUser(res.data);
-      }
-    });
+    axios
+      .get(`http://localhost:5000/users-by-email/${user?.email}`)
+      .then((res) => {
+        if (res.data) {
+          setCurrentUser(res.data);
+        }
+      });
   }, [user?.email]);
   const handleToggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
