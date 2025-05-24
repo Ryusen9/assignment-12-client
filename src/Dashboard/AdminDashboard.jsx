@@ -7,7 +7,7 @@ import { HiOutlineMenuAlt1 } from "react-icons/hi";
 import { IoIosClose } from "react-icons/io";
 import gsap from "gsap";
 import { FiHome } from "react-icons/fi";
-import { MdGroup } from "react-icons/md";
+import { MdGroup, MdOutlinePostAdd } from "react-icons/md";
 
 const AdminDashboard = () => {
   const { user } = useContext(Context);
@@ -20,9 +20,11 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (user?.email) {
-      axios.get(`http://localhost:5000/users-by-email/${user.email}`).then((res) => {
-        if (res.data) setCurrentUser(res.data);
-      });
+      axios
+        .get(`http://localhost:5000/users-by-email/${user.email}`)
+        .then((res) => {
+          if (res.data) setCurrentUser(res.data);
+        });
     }
   }, [user?.email]);
   useEffect(() => {
@@ -54,7 +56,7 @@ const AdminDashboard = () => {
         ref={sidebarRef}
         className={`${
           isMenuOpen ? "w-64" : "w-0"
-        } lg:w-72 overflow-hidden bg-base-300 flex flex-col absolute top-0 left-0 lg:relative z-30 h-[100vh]`}
+        } lg:w-72 min-h-full overflow-hidden bg-base-300 flex flex-col absolute top-0 left-0 lg:relative z-30`}
       >
         <div className="flex flex-col lg:flex-row lg:justify-center lg:items-center gap-4 mb-10 p-4">
           <div className="lg:hidden flex justify-end w-full">
@@ -93,6 +95,16 @@ const AdminDashboard = () => {
                 {" "}
                 <MdGroup />
                 Users
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to={"/dashboard/admin/posts"}
+                className="text-xs md:text-sm lg:text-base flex items-center gap-3 font-semibold hover:bg-rose-500 hover:text-white cursor-pointer duration-200 p-4"
+              >
+                {" "}
+                <MdOutlinePostAdd />
+                Posts
               </NavLink>
             </li>
           </ul>

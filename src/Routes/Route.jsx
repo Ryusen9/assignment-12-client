@@ -16,6 +16,7 @@ import ApplyDonation from "../Donation/ApplyDonation";
 import AllDonation from "../Dashboard/Volunteer Dashboard/AllDonation";
 import AdminDashboardHome from "../Dashboard/Admin/AdminDashboardHome";
 import UserList from "../Dashboard/Admin/UserList";
+import AllPost from "../Dashboard/Admin/AllPost";
 
 const routers = createBrowserRouter([
   {
@@ -54,10 +55,10 @@ const routers = createBrowserRouter([
         path: "/donateNow",
         element: (
           <PrivateRoute allowedRoles={["admin", "volunteer", "user"]}>
-            <ApplyDonation/>
+            <ApplyDonation />
           </PrivateRoute>
         ),
-      }
+      },
     ],
   },
   {
@@ -86,15 +87,19 @@ const routers = createBrowserRouter([
       },
       {
         path: "/dashboard/volunteer-dashboard/allDonations",
-        element: <AllDonation/>,
+        element: <AllDonation />,
       },
       {
         path: "/dashboard/admin/home",
-        element: <AdminDashboardHome/>
+        element: <AdminDashboardHome />,
       },
       {
         path: "/dashboard/admin/users",
-        element: <UserList/>
+        element: <UserList />,
+      },
+      {
+        path: "/dashboard/admin/posts",
+        element: <AllPost />,
       },
     ],
   },
