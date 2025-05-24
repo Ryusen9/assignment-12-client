@@ -22,9 +22,9 @@ const UserDashboard = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/users-by-email/${user.email}`, {
-          withCredentials: true,
-        })
+        .get(
+          `https://server-theta-virid.vercel.app/users-by-email/${user.email}`
+        )
         .then((res) => {
           if (res.data) setCurrentUser(res.data);
         });

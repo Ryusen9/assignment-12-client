@@ -25,9 +25,9 @@ const DonationInformation = () => {
     }
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/users-by-email/${user?.email}`, {
-          withCredentials: true,
-        })
+        .get(
+          `https://server-theta-virid.vercel.app/users-by-email/${user?.email}`
+        )
         .then((res) => {
           if (res.data) {
             setCurrentUser(res.data);
@@ -63,11 +63,8 @@ const DonationInformation = () => {
 
     axios
       .patch(
-        `http://localhost:5000/users-by-email/${user?.email}`,
-        updatedData,
-        {
-          withCredentials: true,
-        }
+        `https://server-theta-virid.vercel.app/users-by-email/${user?.email}`,
+        updatedData
       )
       .then((res) => {
         if (res.status === 200) {

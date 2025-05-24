@@ -9,9 +9,9 @@ const AllDonation = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/volunteers-donations?${user?.email}`, {
-          withCredentials: true,
-        })
+        .get(
+          `https://server-theta-virid.vercel.app/volunteers-donations?${user?.email}`
+        )
         .then((res) => {
           if (res.data) {
             setDonationReqs(res.data);

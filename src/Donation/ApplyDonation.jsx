@@ -49,9 +49,7 @@ const ApplyDonation = () => {
     if (!volunteerEmail) return;
 
     axios
-      .get(`http://localhost:5000/volunteers/${volunteerEmail}`, {
-        withCredentials: true,
-      })
+      .get(`https://server-theta-virid.vercel.app/volunteers/${volunteerEmail}`)
       .then((res) => {
         if (res.data) {
           setCurrentVolunteer(res.data);
@@ -80,7 +78,7 @@ const ApplyDonation = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5000/volunteers-donations",
+        "https://server-theta-virid.vercel.app/volunteers-donations",
         {
           req,
           volunteerName: currentVolunteer.name,
@@ -91,7 +89,7 @@ const ApplyDonation = () => {
 
       if (res.data?.acknowledged) {
         await axios.patch(
-          `http://localhost:5000/donation-requests/${req._id}`,
+          `https://server-theta-virid.vercel.app/donation-requests/${req._id}`,
           { status: "in progress" },
           { withCredentials: true }
         );

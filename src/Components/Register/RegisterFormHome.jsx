@@ -52,7 +52,7 @@ const RegisterFormHome = () => {
 
     // Send the new volunteer data to the server
     await axios
-      .post("http://localhost:5000/volunteers", newVolunteer)
+      .post("https://server-theta-virid.vercel.app/volunteers", newVolunteer)
       .then((res) => {
         if (res.data.insertedId) {
           Swal.fire({

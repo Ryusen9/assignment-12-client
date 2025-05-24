@@ -11,17 +11,21 @@ const AllPost = () => {
   }, []);
 
   const fetchPosts = () => {
-    axios.get("http://localhost:5000/donation-requests").then((res) => {
-      if (Array.isArray(res.data.data)) {
-        const withStatus = res.data.data.map((post) => ({
-          ...post,
-          localStatus: post.status || "pending",
-        }));
-        setDonatePosts(withStatus);
-      } else {
-        setDonatePosts([]);
-      }
-    });
+    axios
+      .get("https://server-theta-virid.vercel.app/donation-requests", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (Array.isArray(res.data.data)) {
+          const withStatus = res.data.data.map((post) => ({
+            ...post,
+            localStatus: post.status || "pending",
+          }));
+          setDonatePosts(withStatus);
+        } else {
+          setDonatePosts([]);
+        }
+      });
   };
 
   const handleStatusChange = (index, newStatus) => {
@@ -33,7 +37,7 @@ const AllPost = () => {
   const handleSave = (post, index) => {
     axios
       .patch(
-        `http://localhost:5000/donation-requests/${post._id}`,
+        `https://server-theta-virid.vercel.app/donation-requests/${post._id}`,
         {
           status: post.localStatus,
         },
@@ -60,9 +64,12 @@ const AllPost = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/donation-requests/${id}`, {
-            withCredentials: true,
-          })
+          .delete(
+            `https://server-theta-virid.vercel.app/donation-requests/${id}`,
+            {
+              withCredentials: true,
+            }
+          )
           .then(() => {
             Swal.fire("Deleted!", "The post has been deleted.", "success");
             fetchPosts();

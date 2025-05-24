@@ -39,9 +39,9 @@ const MyDonationReqAll = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/users-by-email/${user?.email}`, {
-        withCredentials: true,
-      })
+      .get(
+        `https://server-theta-virid.vercel.app/users-by-email/${user?.email}`
+      )
       .then((res) => {
         if (res.data) {
           setCurrentUser(res.data);
@@ -52,7 +52,10 @@ const MyDonationReqAll = () => {
     setLoading(true);
     axios
       .get(
-        `http://localhost:5000/donation-requests?page=${currentPage}&size=${donationPerPage}&sortOrder=${sortOrder}&bloodGroup=${bloodGroupFilter}`
+        `https://server-theta-virid.vercel.app/donation-requests?page=${currentPage}&size=${donationPerPage}&sortOrder=${sortOrder}&bloodGroup=${bloodGroupFilter}`,
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         setDonationReqs(res.data.data);

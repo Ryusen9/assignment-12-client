@@ -52,7 +52,7 @@ const Register = () => {
       await createUser(data.email, data.password);
 
       await axios
-        .post("http://localhost:5000/users", newUser, { withCredentials: true })
+        .post("https://server-theta-virid.vercel.app/users", newUser)
         .then((res) => {
           if (res.data.insertedId) {
             Swal.fire({

@@ -45,7 +45,9 @@ const MyDonationReqAll = () => {
     if (user?.email) {
       axios
         .get(
-          `http://localhost:5000/donation-requests?email=${user.email}&page=${currentPage}&size=${donationPerPage}`
+          `https://server-theta-virid.vercel.app/donation-requests?email=${user.email}&page=${currentPage}&size=${donationPerPage}`, {
+            withCredentials: true,
+          }
         )
         .then((res) => {
           // Destructure total and requests from response
@@ -80,7 +82,7 @@ const MyDonationReqAll = () => {
 
     axios
       .patch(
-        `http://localhost:5000/donation-requests/${selectedReq._id}`,
+        `https://server-theta-virid.vercel.app/donation-requests/${selectedReq._id}`,
         updatedData,
         {
           withCredentials: true,
@@ -117,9 +119,12 @@ const MyDonationReqAll = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/donation-requests/${reqId}`, {
-            withCredentials: true,
-          })
+          .delete(
+            `https://server-theta-virid.vercel.app/donation-requests/${reqId}`,
+            {
+              withCredentials: true,
+            }
+          )
           .then((res) => {
             if (res.status === 200) {
               Swal.fire(

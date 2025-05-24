@@ -59,13 +59,17 @@ const ContextProvide = ({ children }) => {
       if (currentUser?.email) {
         const userData = { email: currentUser.email };
         axios
-          .post("http://localhost:5000/jwt", userData, {
+          .post("https://server-theta-virid.vercel.app/jwt", userData, {
             withCredentials: true,
           })
           .then(() => setLoading(false));
       } else {
         axios
-          .post("http://localhost:5000/logout", {}, { withCredentials: true })
+          .post(
+            "https://server-theta-virid.vercel.app/logout",
+            {},
+            { withCredentials: true }
+          )
           .then(() => setLoading(false));
       }
     });

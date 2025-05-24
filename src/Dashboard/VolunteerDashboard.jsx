@@ -21,7 +21,7 @@ const VolunteerDashboard = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/volunteers/${user.email}`)
+        .get(`https://server-theta-virid.vercel.app/volunteers/${user.email}`)
         .then((res) => {
           if (res.data) setCurrentUser(res.data);
         });

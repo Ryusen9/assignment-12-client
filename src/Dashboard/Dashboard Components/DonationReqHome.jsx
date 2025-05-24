@@ -12,9 +12,11 @@ const DonationReqHome = () => {
     if (user?.email) {
       axios
         .get(
-          `http://localhost:5000/donation-requests?email=${
+          `https://server-theta-virid.vercel.app/donation-requests?email=${
             user.email
-          }&sortOrder=${"newest"}&limit=${3}`
+          }&sortOrder=${"newest"}&limit=${3}`, {
+            withCredentials: true,
+          }
         )
         .then((res) => {
           if (res.data) setDonationRequests(res.data.data);

@@ -8,7 +8,7 @@ const UserList = () => {
   const [updatedRoles, setUpdatedRoles] = useState({}); // Track changed roles
 
   const fetchUsers = () => {
-    axios.get("http://localhost:5000/users").then((res) => {
+    axios.get("https://server-theta-virid.vercel.app/users").then((res) => {
       if (res.data) {
         setUsersAll(res.data);
       }
@@ -28,8 +28,8 @@ const UserList = () => {
     if (!newRole) return;
 
     axios
-      .patch(`http://localhost:5000/users/${userId}`, { role: newRole }, {
-        withCredentials: true,
+      .patch(`https://server-theta-virid.vercel.app/users/${userId}`, {
+        role: newRole,
       })
       .then((res) => {
         if (res.data.modifiedCount > 0) {
