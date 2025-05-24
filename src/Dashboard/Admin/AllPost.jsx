@@ -32,9 +32,15 @@ const AllPost = () => {
 
   const handleSave = (post, index) => {
     axios
-      .patch(`http://localhost:5000/donation-requests/${post._id}`, {
-        status: post.localStatus,
-      })
+      .patch(
+        `http://localhost:5000/donation-requests/${post._id}`,
+        {
+          status: post.localStatus,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then(() => {
         Swal.fire("Success", "Status updated!", "success");
         fetchPosts();
@@ -54,7 +60,9 @@ const AllPost = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/donation-requests/${id}`)
+          .delete(`http://localhost:5000/donation-requests/${id}`, {
+            withCredentials: true,
+          })
           .then(() => {
             Swal.fire("Deleted!", "The post has been deleted.", "success");
             fetchPosts();
@@ -94,7 +102,7 @@ const AllPost = () => {
               {donatePosts.map((post, index) => (
                 <tr key={post._id}>
                   <td>{index + 1}</td>
-                  <td>{post.postedBy?.name || "Unknown"}</td>
+                  <td>{post.email || "Unknown"}</td>
                   <td>{post._id}</td>
                   <td>{new Date(post.createdAt).toLocaleString()}</td>
                   <td className="text-center">

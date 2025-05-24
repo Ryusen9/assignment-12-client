@@ -52,7 +52,10 @@ const CreateDonationReq = () => {
     try {
       const res = await axios.post(
         "http://localhost:5000/donation-requests",
-        newRequest
+        newRequest,
+        {
+          withCredentials: true,
+        }
       );
       if (res.data.insertedId) {
         Swal.fire({

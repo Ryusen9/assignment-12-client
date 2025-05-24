@@ -7,21 +7,30 @@ import React, {
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import gsap from "gsap";
-import { FaRegUser, FaUserInjured, FaRegHospital } from "react-icons/fa";
+import {
+  FaRegUser,
+  FaUserInjured,
+  FaRegHospital,
+  FaLocationCrosshairs,
+  FaLocationDot,
+} from "react-icons/fa6";
 import { MdLocalPhone, MdOutlineBloodtype } from "react-icons/md";
-import { FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 import { BsCalendar2Date } from "react-icons/bs";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Context from "../Context/Context";
 
+const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+
 const ApplyDonation = () => {
   const { state } = useLocation();
+  const { user } = useContext(Context);
   const req = state?.req;
   const containerRef = useRef(null);
-  const { user } = useContext(Context);
-  const volunteerEmail = user?.email;
   const navigate = useNavigate();
+  const [selectedBloodGroup, setSelectedBloodGroup] = useState("");
+  const [loading, setLoading] = useState(false);
+  const volunteerEmail = user?.email;
   const [currentVolunteer, setCurrentVolunteer] = useState(null);
 
   useLayoutEffect(() => {
@@ -33,9 +42,79 @@ const ApplyDonation = () => {
         ease: "power3.out",
       });
     }, containerRef);
-
-    return () => ctx.revert(); // cleanup for GSAP context
+    return () => ctx.revert();
   }, []);
+
+  useEffect(() => {
+    if (!volunteerEmail) return;
+
+    axios
+      .get(`http://localhost:5000/volunteers/${volunteerEmail}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data) {
+          setCurrentVolunteer(res.data);
+        }
+      })
+      .catch((err) => console.error("Error fetching volunteer:", err));
+  }, [volunteerEmail]);
+
+  const handleApply = async () => {
+    if (!selectedBloodGroup) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Select Blood Group",
+        text: "Please select your blood group as a volunteer before applying.",
+      });
+    }
+
+    if (selectedBloodGroup !== req.bloodGroup) {
+      return Swal.fire({
+        icon: "error",
+        title: "Blood Group Mismatch",
+        text: "Your selected blood group does not match the required one.",
+      });
+    }
+
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        "http://localhost:5000/volunteers-donations",
+        {
+          req,
+          volunteerName: currentVolunteer.name,
+          volunteerEmail: currentVolunteer.email,
+        },
+        { withCredentials: true }
+      );
+
+      if (res.data?.acknowledged) {
+        await axios.patch(
+          `http://localhost:5000/donation-requests/${req._id}`,
+          { status: "in progress" },
+          { withCredentials: true }
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Application Submitted",
+          text: "You have successfully applied to donate blood.",
+        }).then(() => navigate("/donations"));
+      } else {
+        throw new Error("Application failed.");
+      }
+    } catch (error) {
+      console.error("Error applying:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Application Failed",
+        text: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (!req) {
     return (
@@ -45,54 +124,15 @@ const ApplyDonation = () => {
     );
   }
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/volunteers/${volunteerEmail}`)
-      .then((res) => {
-        if (res.data) {
-          setCurrentVolunteer(res.data);
-        }
-      });
-  }, []);
-  console.log(currentVolunteer);
-  console.log(req);
-  const handleApply = () => {
-    if (currentVolunteer.bloodGroup !== req.bloodGroup) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Your blood group does not match the request.",
-      });
-    } else {
-      axios
-        .post("http://localhost:5000/volunteers-donations", {
-          req,
-          volunteerName: currentVolunteer.name,
-          volunteerEmail: currentVolunteer.email,
-        })
-        .then((res) => {
-          if (res.data.acknowledged) {
-            Swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "You have successfully applied to donate blood.",
-            }).then(() => {
-              navigate("/donations");
-            });
-          }
-        });
-    }
-  };
   return (
     <div
       ref={containerRef}
       className="min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 text-white flex justify-center items-center p-4"
     >
-      <div className="donation-card max-w-3xl w-full bg-white text-slate-900 rounded-2xl shadow-2xl p-8 space-y-6">
-        <h2 className="text-3xl font-bold text-center text-red-600">
-          Blood Donation Request
-        </h2>
+      <div className="donation-card grid md:grid-cols-2 gap-6 max-w-5xl w-full bg-white text-slate-900 rounded-2xl shadow-2xl p-8">
+        {/* Left Side - Request Info */}
         <div className="space-y-4 text-base font-medium">
+          <h2 className="text-3xl font-bold text-red-600">Donation Details</h2>
           <p className="flex items-center gap-3">
             <FaRegUser /> Donor Name: {req.name}
           </p>
@@ -106,7 +146,7 @@ const ApplyDonation = () => {
             <MdLocalPhone /> Phone: {req.phone}
           </p>
           <p className="flex items-center gap-3">
-            <MdOutlineBloodtype /> Blood Group: {req.bloodGroup}
+            <MdOutlineBloodtype /> Required Blood Group: {req.bloodGroup}
           </p>
           <p className="flex items-center gap-3">
             <FaLocationCrosshairs /> District: {req.district}
@@ -124,19 +164,42 @@ const ApplyDonation = () => {
               timeStyle: "short",
             })}
           </p>
-          <div className="p-4 bg-slate-100 rounded-md">
-            <p className="text-black">
-              <span className="font-semibold">Message:</span>{" "}
-              {req.request_message || "No message provided"}
-            </p>
-          </div>
         </div>
-        <div className="flex justify-center">
+
+        {/* Right Side - Apply Form */}
+        <div className="flex flex-col justify-between">
+          <div className="space-y-4">
+            <label className="block font-semibold text-lg">
+              Your Blood Group
+            </label>
+            <select
+              value={selectedBloodGroup}
+              onChange={(e) => setSelectedBloodGroup(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              <option value="">Select your blood group</option>
+              {bloodGroups.map((group) => (
+                <option key={group} value={group}>
+                  {group}
+                </option>
+              ))}
+            </select>
+            <div className="p-4 bg-slate-100 rounded-md text-black">
+              <p>
+                <span className="font-semibold">Message:</span>{" "}
+                {req.request_message || "No message provided"}
+              </p>
+            </div>
+          </div>
+
           <button
             onClick={handleApply}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+            disabled={loading}
+            className={`mt-6 w-full ${
+              loading ? "bg-red-400" : "bg-red-600 hover:bg-red-700"
+            } text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg`}
           >
-            Apply to Donate
+            {loading ? "Applying..." : "Apply to Donate"}
           </button>
         </div>
       </div>

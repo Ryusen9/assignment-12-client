@@ -24,7 +24,9 @@ const AdminDashboardHome = () => {
       window.location.href = "/login";
     }
     if (user?.email) {
-      axios.get(`http://localhost:5000/users-by-email/${user?.email}`).then((res) => {
+      axios.get(`http://localhost:5000/users-by-email/${user?.email}`, {
+        withCredentials: true,
+      }).then((res) => {
         if (res.data) {
           setCurrentUser(res.data);
           reset(res.data); // populate form
@@ -58,9 +60,10 @@ const AdminDashboardHome = () => {
     };
 
     axios
-      .patch(`http://localhost:5000/users-by-email/${user?.email}`, updatedData)
+      .patch(`http://localhost:5000/users-by-email/${user?.email}`, updatedData, {
+        withCredentials: true,
+      })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           Swal.fire({
             icon: "success",

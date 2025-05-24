@@ -81,7 +81,10 @@ const MyDonationReqAll = () => {
     axios
       .patch(
         `http://localhost:5000/donation-requests/${selectedReq._id}`,
-        updatedData
+        updatedData,
+        {
+          withCredentials: true,
+        }
       )
       .then((res) => {
         if (res.status === 200) {
@@ -114,7 +117,9 @@ const MyDonationReqAll = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/donation-requests/${reqId}`)
+          .delete(`http://localhost:5000/donation-requests/${reqId}`, {
+            withCredentials: true,
+          })
           .then((res) => {
             if (res.status === 200) {
               Swal.fire(

@@ -21,7 +21,6 @@ const DonationReqHome = () => {
         });
     }
   }, []);
-  console.log(donationRequests);
   return (
     <div className="min-h-full">
       <p className="text-center text-xl md:text-2xl lg:text-4xl font-bold mb-6">

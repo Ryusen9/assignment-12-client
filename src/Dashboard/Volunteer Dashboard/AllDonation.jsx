@@ -9,7 +9,9 @@ const AllDonation = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/volunteers-donations?${user?.email}`)
+        .get(`http://localhost:5000/volunteers-donations?${user?.email}`, {
+          withCredentials: true,
+        })
         .then((res) => {
           if (res.data) {
             setDonationReqs(res.data);
@@ -17,7 +19,6 @@ const AllDonation = () => {
         });
     }
   }, []);
-  console.log(donationReqs);
   return (
     <div className="p-6 flex flex-col items-center min-w-full h-full">
       <p className="text-center text-lg md:text-2xl lg:text-4xl font-bold mb-7">

@@ -15,7 +15,9 @@ const Navbar = () => {
   const { user, logoutUser } = useContext(Context);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/users-by-email/${user?.email}`)
+      .get(`http://localhost:5000/users-by-email/${user?.email}`, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.data) {
           setCurrentUser(res.data);
@@ -41,7 +43,6 @@ const Navbar = () => {
         });
       });
   };
-  console.log(user);
   return (
     <nav className="fixed top-0 left-0 w-full flex items-center justify-center z-10">
       <div className="flex items-center justify-between max-w-7xl p-3 mx-auto bg-slate-50 w-full lg:rounded-lg">

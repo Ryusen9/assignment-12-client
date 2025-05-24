@@ -23,7 +23,8 @@ const Login = () => {
   } = useForm();
 
   const navigate = useNavigate();
-  const { logInUser } = useContext(Context);
+  const { logInUser, logInWithGoogle, logInWithGithub, logInWithFacebook } =
+    useContext(Context);
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
@@ -40,7 +41,46 @@ const Login = () => {
     });
     reset();
   };
+  const handleGoogleLogin = () => {
+    logInWithGoogle().then((res) => {
+      if (res.user) {
+        Swal.fire(
+          "Login Successful",
+          "You have successfully logged in!",
+          "success"
+        )
+          .then(() => navigate("/"))
+          .then(() => window.location.reload());
+      }
+    });
+  };
+  const handleGithubLogin = () => {
+    logInWithGithub().then((res) => {
+      if (res.user) {
+        Swal.fire(
+          "Login Successful",
+          "You have successfully logged in!",
+          "success"
+        )
+          .then(() => navigate("/"))
+          .then(() => window.location.reload());
+      }
+    });
+  };
 
+  const handleFacebookLogin = () => {
+    logInWithFacebook().then((res) => {
+      if (res.user) {
+        Swal.fire(
+          "Login Successful",
+          "You have successfully logged in!",
+          "success"
+        )
+          .then(() => navigate("/"))
+          .then(() => window.location.reload());
+      }
+    });
+  };
   return (
     <>
       <Helmet>
@@ -123,13 +163,22 @@ const Login = () => {
 
             {/* Social Login Buttons */}
             <div className="flex justify-center gap-6 mb-4">
-              <button className="btn btn-outline btn-circle text-xl">
+              <button
+                onClick={handleGoogleLogin}
+                className="btn btn-outline btn-circle text-xl"
+              >
                 <FaGoogle />
               </button>
-              <button className="btn btn-outline btn-circle text-xl">
+              <button
+                onClick={handleGithubLogin}
+                className="btn btn-outline btn-circle text-xl"
+              >
                 <FaGithub />
               </button>
-              <button className="btn btn-outline btn-circle text-xl">
+              <button
+                onClick={handleFacebookLogin}
+                className="btn btn-outline btn-circle text-xl"
+              >
                 <FaFacebookF />
               </button>
             </div>

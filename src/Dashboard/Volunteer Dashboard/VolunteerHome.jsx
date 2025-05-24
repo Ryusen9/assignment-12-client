@@ -24,7 +24,9 @@ const VolunteerHome = () => {
     if (!user) navigate("/login");
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/volunteers/${user.email}`)
+        .get(`http://localhost:5000/volunteers/${user.email}`, {
+          withCredentials: true,
+        })
         .then((res) => {
           if (res.data) {
             setCurrentUser(res.data);
@@ -63,7 +65,9 @@ const VolunteerHome = () => {
     };
 
     axios
-      .patch(`http://localhost:5000/volunteers/${user.email}`, updatedData)
+      .patch(`http://localhost:5000/volunteers/${user.email}`, updatedData, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           Swal.fire("Success", "Profile updated successfully!", "success");

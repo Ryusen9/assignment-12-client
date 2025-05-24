@@ -17,11 +17,13 @@ import AllDonation from "../Dashboard/Volunteer Dashboard/AllDonation";
 import AdminDashboardHome from "../Dashboard/Admin/AdminDashboardHome";
 import UserList from "../Dashboard/Admin/UserList";
 import AllPost from "../Dashboard/Admin/AllPost";
+import ErrorPage from "../Components/ErrorPage";
 
 const routers = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -52,7 +54,7 @@ const routers = createBrowserRouter([
         ),
       },
       {
-        path: "/donateNow",
+        path: "/donateNow/:id",
         element: (
           <PrivateRoute allowedRoles={["admin", "volunteer", "user"]}>
             <ApplyDonation />

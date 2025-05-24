@@ -51,19 +51,21 @@ const Register = () => {
 
       await createUser(data.email, data.password);
 
-      await axios.post("http://localhost:5000/users", newUser).then((res) => {
-        if (res.data.insertedId) {
-          Swal.fire({
-            title: "Registration Successful",
-            text: `${data.name}, you have successfully registered!`,
-            icon: "success",
-            confirmButtonText: "OK",
-          }).then(() => {
-            reset();
-            navigate("/");
-          });
-        }
-      });
+      await axios
+        .post("http://localhost:5000/users", newUser, { withCredentials: true })
+        .then((res) => {
+          if (res.data.insertedId) {
+            Swal.fire({
+              title: "Registration Successful",
+              text: `${data.name}, you have successfully registered!`,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then(() => {
+              reset();
+              navigate("/");
+            });
+          }
+        });
     } catch (error) {
       console.error("Registration failed:", error);
     }

@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import Context from "../../Context/Context";
 const RegisterFormHome = () => {
   const {
     register,
@@ -11,6 +12,7 @@ const RegisterFormHome = () => {
   } = useForm();
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
+  const { user } = useContext(Context);
 
   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -153,25 +155,16 @@ const RegisterFormHome = () => {
                 </g>
               </svg>
               <input
+                readOnly
                 className={`w-full ${errors.email ? "border-red-500" : ""}`}
                 type="email"
-                placeholder="mail@site.com"
+                defaultValue={user?.email}
                 {...register("email", {
                   required: true,
                   pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
                 })}
               />
             </label>
-
-            {/* Error messages for Email */}
-            {errors.email?.type === "required" && (
-              <div className="mt-1 text-red-500">Email is required</div>
-            )}
-            {errors.email?.type === "pattern" && (
-              <div className="mt-1 text-red-500">
-                Enter a valid email address
-              </div>
-            )}
           </div>
 
           {/* Photo field */}

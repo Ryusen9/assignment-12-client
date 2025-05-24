@@ -28,7 +28,9 @@ const UserList = () => {
     if (!newRole) return;
 
     axios
-      .patch(`http://localhost:5000/users/${userId}`, { role: newRole })
+      .patch(`http://localhost:5000/users/${userId}`, { role: newRole }, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.data.modifiedCount > 0) {
           fetchUsers();

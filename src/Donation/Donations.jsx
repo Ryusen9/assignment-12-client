@@ -18,6 +18,7 @@ const MyDonationReqAll = () => {
   const [sortOrder, setSortOrder] = useState("oldest");
   const [bloodGroupFilter, setBloodGroupFilter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const numberOfPages = Math.ceil(totalCount / donationPerPage);
   const pages = Array.from({ length: numberOfPages }, (_, i) => i + 1);
@@ -36,6 +37,17 @@ const MyDonationReqAll = () => {
     setCurrentPage(1);
   };
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users-by-email/${user?.email}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data) {
+          setCurrentUser(res.data);
+        }
+      });
+  }, []);
   useEffect(() => {
     setLoading(true);
     axios
@@ -105,7 +117,14 @@ const MyDonationReqAll = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
           {donationReqs.map((req) => (
-            <SpotlightCard key={req._id}>
+            <SpotlightCard
+              className={
+                req.status === "completed" || req.status === "in progress"
+                  ? "hidden"
+                  : ""
+              }
+              key={req._id}
+            >
               <p className="text-center text-xl font-semibold mb-4">
                 Blood Donation Request
               </p>
@@ -159,7 +178,10 @@ const MyDonationReqAll = () => {
               </div>
               <div className="mt-3 flex items-center justify-end">
                 <Link state={{ req }} to={`/donateNow/${req._id}`}>
-                  <button className="btn btn-sm md:btn-md btn-primary">
+                  <button
+                    disabled={currentUser.role === "user"}
+                    className="btn btn-sm md:btn-md btn-primary"
+                  >
                     Donate Now
                   </button>
                 </Link>

@@ -21,7 +21,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/users-by-email/${user.email}`)
+        .get(`http://localhost:5000/users-by-email/${user.email}`, {
+          withCredentials: true,
+        })
         .then((res) => {
           if (res.data) setCurrentUser(res.data);
         });
